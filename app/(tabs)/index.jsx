@@ -42,7 +42,7 @@ export default function HomeScreen() {
             })} */}
             {userData.map((user)=>
                 
-                <TouchableOpacity style={styles.button} onPress={()=>goToDetail(user)}>
+                <TouchableOpacity style={styles.button} onPress={()=>goToDetail(user)} key={user.id}>
                         <Text style={styles.name}>{user.name}</Text>
                 </TouchableOpacity>
                 
