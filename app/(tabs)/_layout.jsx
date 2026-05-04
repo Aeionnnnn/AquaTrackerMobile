@@ -10,6 +10,13 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
+                name="App"
+                options={{
+                    title: 'Test',
+                    tabBarLabel: 'Test',
+                }}
+            />
+            <Tabs.Screen
                 name="explore"
                 options={{
                     title: 'Explore',

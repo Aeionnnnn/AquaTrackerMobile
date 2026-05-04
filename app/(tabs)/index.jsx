@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import {useEffect, useState} from 'react';
 import { router } from 'expo-router';
+import { supabase } from '../../utils/supabase';
+
 
 export default function HomeScreen() {
 
@@ -17,11 +19,36 @@ export default function HomeScreen() {
         router.push('/detail?id=' + String(props.id));
     }
 
+
+  const [users, setUsers] = useState([]);
+  const [items, setItems] = useState([]);
+
+const getUsers = async () => {
+   const { data, error} = await supabase.from('user').select();
+
+    setUsers(data)
+}
+
+const getItems = async () =>{
+    const {data, error} = await supabase.from('items').select();
+
+    setItems(data)
+}
+
+useEffect(() => { 
+    getItems()
+}, [])
+
+console.log(items);
+    
+  
+
+
     const getData=()=>{
         fetch('https://jsonplaceholder.typicode.com/users')
         .then(response=>response.json())
         .then(data=>{
-            console.log(data)
+            //console.log(data)
             setUserData(data)
         })
     }
