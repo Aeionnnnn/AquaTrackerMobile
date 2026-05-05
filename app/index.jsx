@@ -1,7 +1,7 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import {useEffect, useState} from 'react';
 import { router } from 'expo-router';
-import { supabase } from '../../utils/supabase';
+import { supabase } from '../utils/supabase';
 
 
 export default function HomeScreen() {
@@ -13,53 +13,43 @@ export default function HomeScreen() {
     //     { id: 4, name: "Marr", course: "ICT", year: "3rd Year", enrolled: false }
     // ])
 
-    const [userData,setUserData] = useState([])
 
-    function goToDetail(props) {
-        router.push('/detail?id=' + String(props.id));
+    function goToLogin() {
+        router.push('/login');
     }
 
 
-  const [users, setUsers] = useState([]);
+  //const [users, setUsers] = useState([]);
   const [items, setItems] = useState([]);
 
-const getUsers = async () => {
-   const { data, error} = await supabase.from('user').select();
+// const getUsers = async () => {
+//    const { data, error} = await supabase.from('user').select();
 
-    setUsers(data)
-}
+//     setUsers(data)
+// }
+
+const paths = {}
 
 const getItems = async () =>{
     const {data, error} = await supabase.from('items').select();
+    
+    if(error) console.log(error);
+
 
     setItems(data)
 }
 
-useEffect(() => { 
-    getItems()
-}, [])
+
+useEffect(() => {getItems()}, [])
 
 console.log(items);
-    
-  
 
-
-    const getData=()=>{
-        fetch('https://jsonplaceholder.typicode.com/users')
-        .then(response=>response.json())
-        .then(data=>{
-            //console.log(data)
-            setUserData(data)
-        })
-    }
-
-    useEffect(()=>{getData()},[])
 
     return (
         <View style={styles.container}>
              <Text style={styles.title}>🏠 Home</Text>
             <Text style={styles.subtitle}>Welcome to the app!</Text>
-{/*
+            {   /*
             {studentList.map((student) => {
                 return (
                     <TouchableOpacity style={styles.button} onPress={()=>goToDetail(student)}>
@@ -67,13 +57,24 @@ console.log(items);
                     </TouchableOpacity>
                 )
             })} */}
-            {userData.map((user)=>
+            {/* {userData.map((user)=>
                 
                 <TouchableOpacity style={styles.button} onPress={()=>goToDetail(user)} key={user.id}>
                         <Text style={styles.name}>{user.name}</Text>
                 </TouchableOpacity>
                 
-            )}
+            )} */}
+            {items.map((item) => {
+                return(<TouchableOpacity style={styles.button} key={item.ItemID}>
+                        <Text style={styles.name}>{item.ItemName}</Text>
+                        <Text style={styles.name}>{item.Description}</Text>                    
+                </TouchableOpacity>)
+                
+            })}
+
+            <TouchableOpacity style={styles.button} onPress={()=>{goToLogin()}}>
+                <Text style={styles.name}>Login</Text>
+            </TouchableOpacity>
         </View>
     );
 }

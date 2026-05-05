@@ -1,9 +1,19 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet,TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
+
+
 export default function ExploreScreen() {
+    function goToHome(){
+        router.replace("/")
+    }
+
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>🔍 Explore</Text>
-            <Text style={styles.subtitle}>Find something new!</Text>
+            <TouchableOpacity onPress={()=>{goToHome()}}>
+                <Text style={styles.title}>🔍 Explore</Text>
+                <Text style={styles.subtitle}>Find something new!</Text>
+            </TouchableOpacity>
+            
         </View>
     );
 }
