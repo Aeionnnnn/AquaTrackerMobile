@@ -1,30 +1,40 @@
 import { View, Text, StyleSheet,TouchableOpacity, TextInput } from 'react-native';
 import {useState} from 'react'
 import { router } from 'expo-router';
+import { supabase } from "../../utils/supabase"
 
 
-export default function ExploreScreen() {
+export default function LoginScreen() {
     function goToHome(){
         router.replace("/")
     }
 
-    const [username, setUsername] = useState("")
+    async function logIn(){
+        const {data: userData, error: loginError} = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        })
+
+        console.log(userData)
+    }
+
+    const [email, setEmail] = useState("")
     const [password, setPass] = useState("")
 
     return (
         <View style={styles.container}>
 
-            <TextInput style={styles.input} onChangeText={(text)=>{setUsername(text)}} 
-                placeholder="Username" placeholderTextColor={'#888'}
-                value={username}/>
+            <TextInput style={styles.input} onChangeText={(text)=>{setEmail(text)}} 
+                placeholder="Email" placeholderTextColor={'#888'}
+                value={email}/>
             <TextInput style={styles.input} onChangeText={(text)=>{setPass(text)}} 
                 placeholder="Password" placeholderTextColor={'#888'}
                 value={password}  secureTextEntry={true}/>
-            <TouchableOpacity onPress={()=>{console.log(username + " " + password); setPass(""); setUsername("")}}><Text>Submit</Text></TouchableOpacity>
+            <TouchableOpacity onPress={()=>{logIn()}}><Text>Submit</Text></TouchableOpacity>
             <TouchableOpacity onPress={()=>{goToHome()}}>
                 <Text style={styles.subtitle}>Home</Text>
             </TouchableOpacity>
-            
+
         </View>
     );
 }

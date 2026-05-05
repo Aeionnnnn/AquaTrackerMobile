@@ -22,6 +22,7 @@ export default function HomeScreen() {
   //const [users, setUsers] = useState([]);
   const [items, setItems] = useState([]);
   const [itemsLoaded, setItemsLoaded] = useState(0);
+  const [loginVerified, setLoginVerified] = useState(0);
 
 // const getUsers = async () => {
 //    const { data, error} = await supabase.from('user').select();
@@ -31,11 +32,20 @@ export default function HomeScreen() {
 
 const paths = {}
 
-const getItems = async () =>{
+const initLoad = async () =>{
     const {data, error} = await supabase.from('items').select();
-    
+    const {data: userData} = await supabase.auth.getUser()
     if(error) console.log(error);
+    console.log(userData.user)
 
+    if(userData.user != null) switch(userData.user.user_metadata.type){
+        case "CUST":
+            router.replace("/detail")
+        break;
+        case "STAFF":
+            router.replace("/detail")
+        break;
+    }
 
     setItems(data)
     setItemsLoaded(1);
@@ -51,10 +61,15 @@ const Items = () => {
                 
             })
     }else return(<Text>Loading Items</Text>)
-        
 }
 
-useEffect(() => {getItems()}, [])
+const LoginAccount = () => {
+    if(loginVerified) {
+        
+    }
+}
+
+useEffect(() => {initLoad()}, [])
 
 console.log(items);
 

@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useLocalSearchParams, router } from 'expo-router';
 import { useState, useEffect } from 'react';
+import { supabase } from '../utils/supabase';
 
 export default function DetailScreen() {
     // const [studentList] = useState([
@@ -10,28 +11,39 @@ export default function DetailScreen() {
     //     { id: 4, name: "Marr", course: "ICT", year: "3rd Year", enrolled: false }
     // ]);
 
-    const [userData, setUserData] = useState([])
+    async function signOut(){
+            const {data, error} = await supabase.auth.signOut()
+            router.replace("/")
+        }
 
-    const getData = () => {
-        fetch('https://jsonplaceholder.typicode.com/users')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                setUserData(data)
-            })
+    const [userData, setUserData] = useState({})
+    let userMeta = {};
+    let isUserDataFetched = 0;
+
+    const getUserData = async () => {
+       const {data: user, error: userError} = await supabase.auth.getUser()
+
+       console.log(user.user.user_metadata.fullName)
+       setUserData(user.user.user_metadata)
     }
 
-    useEffect(() => { getData() }, [])
+    useEffect(() => { getUserData() }, [])
 
     const { id } = useLocalSearchParams();
 
     // for( let stud of studentList){
 
     // }
+    const UserName = () => {
+        if(userData.fullName){
+            return(<Text>Name: {userData.fullName} </Text>)
+        }else return(<Text>Loading</Text>)
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>📄 Detail Screen</Text>
-            {userData.map((user) => {
+            {/* {userData.map((user) => {
                 if (user.id === parseInt(id)) {
                     return (
                         <View style={styles.body}>
@@ -43,8 +55,15 @@ export default function DetailScreen() {
 
                     )
                 }
-            })}
+            })} */}
+            <UserName/>
 
+            <TouchableOpacity onPress={()=>{router.replace("/")}}>
+                <Text>Home</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>{signOut()}}>
+                <Text>Log Out</Text>
+            </TouchableOpacity>
         </View>
     );
 }

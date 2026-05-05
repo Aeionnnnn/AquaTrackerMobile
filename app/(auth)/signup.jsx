@@ -1,11 +1,84 @@
-import { View, Text, StyleSheet } from 'react-native';
-export default function ProfileScreen() {
-    return (
-        <View style={styles.container}>
-            <Text style={styles.title}>👤 Profile</Text>
-            <Text style={styles.subtitle}>Your profile goes here.</Text>
-        </View>
-    );
+import { View, Text, StyleSheet,TouchableOpacity, TextInput } from 'react-native';
+import {useState} from 'react'
+import { router } from 'expo-router';
+import { supabase } from '../../utils/supabase';
+
+export default function SignUpScreen() {
+    function goToHome(){
+            router.replace("/")
+        }
+
+    async function signOut(){
+        const {data, error} = await supabase.auth.signOut()
+    }
+    
+    async function signUp(){
+        console.log("Username: " + username +
+                    "\nPassword: " + password +
+                    "\nFull Name: " + fullName + 
+                    "\nAddress: " + address +
+                    "\nContact: " + contact
+        )
+
+    
+        const {data, error} = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                username: username,
+                fullName: fullName,
+                address: address,
+                contact: contact,
+                type: "CUST"
+            }}
+        })
+
+        console.log(data)
+
+        setPass("");
+    }
+
+        const [username, setUsername] = useState("")
+        const [password, setPass] = useState("")
+        const [email, setEmail] = useState("")
+        const [fullName, setFullName] = useState("")
+        const [address, setAddress] = useState("")
+        const [contact, setContact] = useState("")
+    
+        return (
+            <View style={styles.container}>
+    
+                <TextInput style={styles.input} onChangeText={(text)=>{setUsername(text)}} 
+                    placeholder="Username" placeholderTextColor={'#888'}
+                    value={username}/>
+                <TextInput style={styles.input} onChangeText={(text)=>{setPass(text)}} 
+                    placeholder="Password" placeholderTextColor={'#888'}
+                    value={password}  secureTextEntry={true}/>
+                <TextInput style={styles.input} onChangeText={(text)=>{setEmail(text)}} 
+                    placeholder="Email" placeholderTextColor={'#888'}
+                    value={email}/>
+                <TextInput style={styles.input} onChangeText={(text)=>{setFullName(text)}} 
+                    placeholder="Full Name" placeholderTextColor={'#888'}
+                    value={fullName}/>
+                <TextInput style={styles.input} onChangeText={(text)=>{setAddress(text)}} 
+                    placeholder="Address" placeholderTextColor={'#888'}
+                    value={address}/>
+                <TextInput style={styles.input} onChangeText={(text)=>{setContact(text)}} 
+                    placeholder="Contact" placeholderTextColor={'#888'}
+                    value={contact}/>
+                <TouchableOpacity onPress={()=>{signUp()}}><Text>Submit</Text></TouchableOpacity>
+                <TouchableOpacity onPress={()=>{goToHome()}}>
+                    <Text style={styles.subtitle}>Home</Text>
+                </TouchableOpacity>
+                
+            <TouchableOpacity onPress={()=>{signOut()}}>
+                <Text style={styles.subtitle}>SIGN OUT</Text>
+            </TouchableOpacity>
+            
+                
+            </View>
+        );
 }
 
 const styles = StyleSheet.create({
@@ -24,4 +97,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#666',
     },
+    input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
 });
