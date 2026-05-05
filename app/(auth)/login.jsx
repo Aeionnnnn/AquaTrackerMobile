@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet,TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet,TouchableOpacity, TextInput } from 'react-native';
+import {useState} from 'react'
 import { router } from 'expo-router';
 
 
@@ -7,11 +8,21 @@ export default function ExploreScreen() {
         router.replace("/")
     }
 
+    const [username, setUsername] = useState("")
+    const [password, setPass] = useState("")
+
     return (
         <View style={styles.container}>
+
+            <TextInput style={styles.input} onChangeText={(text)=>{setUsername(text)}} 
+                placeholder="Username" placeholderTextColor={'#888'}
+                value={username}/>
+            <TextInput style={styles.input} onChangeText={(text)=>{setPass(text)}} 
+                placeholder="Password" placeholderTextColor={'#888'}
+                value={password}  secureTextEntry={true}/>
+            <TouchableOpacity onPress={()=>{console.log(username + " " + password); setPass(""); setUsername("")}}><Text>Submit</Text></TouchableOpacity>
             <TouchableOpacity onPress={()=>{goToHome()}}>
-                <Text style={styles.title}>🔍 Explore</Text>
-                <Text style={styles.subtitle}>Find something new!</Text>
+                <Text style={styles.subtitle}>Home</Text>
             </TouchableOpacity>
             
         </View>
@@ -34,4 +45,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#666',
     },
+    input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
 });
