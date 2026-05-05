@@ -21,6 +21,7 @@ export default function HomeScreen() {
 
   //const [users, setUsers] = useState([]);
   const [items, setItems] = useState([]);
+  const [itemsLoaded, setItemsLoaded] = useState(0);
 
 // const getUsers = async () => {
 //    const { data, error} = await supabase.from('user').select();
@@ -37,8 +38,21 @@ const getItems = async () =>{
 
 
     setItems(data)
+    setItemsLoaded(1);
 }
 
+const Items = () => {
+    if(itemsLoaded){
+        return items.map((item) => {
+                return(<TouchableOpacity style={styles.button} key={item.ItemID}>
+                        <Text style={styles.name}>{item.ItemName}</Text>
+                        <Text style={styles.name}>{item.Description}</Text>                    
+                </TouchableOpacity>)
+                
+            })
+    }else return(<Text>Loading Items</Text>)
+        
+}
 
 useEffect(() => {getItems()}, [])
 
@@ -64,13 +78,7 @@ console.log(items);
                 </TouchableOpacity>
                 
             )} */}
-            {items.map((item) => {
-                return(<TouchableOpacity style={styles.button} key={item.ItemID}>
-                        <Text style={styles.name}>{item.ItemName}</Text>
-                        <Text style={styles.name}>{item.Description}</Text>                    
-                </TouchableOpacity>)
-                
-            })}
+            <Items/>
 
             <TouchableOpacity style={styles.button} onPress={()=>{goToLogin()}}>
                 <Text style={styles.name}>Login</Text>
