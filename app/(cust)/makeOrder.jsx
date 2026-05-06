@@ -64,6 +64,27 @@ export default function MakeAnOrder(){
         setLogOutText("Log Out");
     }
 
+    async function createOrder(){
+        //console.log(cart);
+        //console.log("Client Key Check:", supabase.supabaseKey ? "Present" : "MISSING");
+        //console.log("Client URL Check:", supabase.supabaseUrl);
+
+        const {data: orderData, error: orderError} = await supabase.rpc("create_order", {
+            cargo: cart,
+            delivery: isCartDelivery
+        })
+
+        console.log(orderError)
+        console.log(orderData);
+        setCart([]);
+    }
+
+    async function testRpc(){
+        const {data: testData, error: testError} = await supabase.rpc("test")
+
+        console.log(testData);
+    }
+
     function addToCart(item){
         setIsCartUpdating(true);
         let currentItem = itemsProd.find(prod => prod.ItemID === item.id)
@@ -125,7 +146,7 @@ export default function MakeAnOrder(){
             <TouchableOpacity style={styles.button} onPress={()=>{goHome()}}>
                 <Text>Home</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={()=>{console.log(cart); setCart([])}}>
+            <TouchableOpacity style={styles.button} onPress={()=>{createOrder();/*testRpc();*/}}>
                 <Text>Order {/*Might need to change this */}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={()=>{setIsCartDelivery(!isCartDelivery)}}>
