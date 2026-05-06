@@ -16,6 +16,14 @@ export default function LoginScreen() {
         })
 
         console.log(userData)
+
+        if(userData.user){
+            switch(userData.user.user_metadata.type){
+                case "CUST":
+                    router.replace("/makeOrder")
+                break;
+            }
+        }
     }
 
     const [email, setEmail] = useState("")

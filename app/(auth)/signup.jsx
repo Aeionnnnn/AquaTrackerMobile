@@ -10,6 +10,14 @@ export default function SignUpScreen() {
 
     async function signOut(){
         const {data, error} = await supabase.auth.signOut()
+
+        if(data.user){
+            switch(data.user.user_metadata.type){
+                case "CUST":
+                    router.replace("/makeOrder")    
+                break;
+            }
+        }
     }
     
     async function signUp(){
