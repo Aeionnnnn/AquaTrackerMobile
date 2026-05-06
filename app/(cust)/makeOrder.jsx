@@ -7,9 +7,10 @@ import OrderItem  from '../../components/OrderItem'
 export default function MakeAnOrder(){
     const [logOutText, setLogOutText] = useState("Log Out");
     const [cart, setCart] = useState([]);
-    const [isCartUpdating, setIsCartUpdating] = useState(0);
+    const [isCartUpdating, setIsCartUpdating] = useState(false);
     const [itemsProd, setItemsProd] = useState([]);
-    const [isItemsLoaded, setIsItemsLoaded] = useState(0);
+    const [isItemsLoaded, setIsItemsLoaded] = useState(false);
+    const [isCartView, setIsCartView] = useState(false)
 
     // return(
     //                 <View style={styles.itemCard} key={key}>
@@ -35,6 +36,33 @@ export default function MakeAnOrder(){
         }else return(<Text>Items Loading...</Text>)        
     }
 
+    const CartItems = () => {
+        if(itemsProd && cart){
+            let returnArr = [];
+            let totalPrice = 0;
+            
+            cart.forEach((cartItem) => {
+                totalPrice += cartItem.price;
+                returnArr.push(
+                    <View style={styles.itemCard} key = {cartItem.ItemID}>
+                        <Text>{cartItem.ItemName}</Text>
+                        <Text>Amount: {cartItem.amount}</Text>
+                        <Text>Price: {cartItem.price}</Text>
+                    </View>
+                )
+            })
+            
+            returnArr.push(
+                <View style={styles.itemCard}>
+                    {(totalPrice > 0)?<Text>Total Price: {totalPrice}</Text>:<Text>Nothing in Cart</Text>}
+                </View>
+            )
+            
+            return returnArr
+
+        }
+    }
+
     async function initItems(){
         const {data: dataItems, error: errorItems} = await supabase.from("items").select();
 
@@ -43,7 +71,7 @@ export default function MakeAnOrder(){
         if(dataItems) {
             console.log(dataItems)
             setItemsProd(dataItems);
-            setIsItemsLoaded(1);
+            setIsItemsLoaded(true);
         }
     }
 
@@ -57,7 +85,25 @@ export default function MakeAnOrder(){
     }
 
     function addToCart(item){
-        console.log(item)
+        setIsCartUpdating(true);
+        let currentItem = itemsProd.find(prod => prod.ItemID === item.id)
+        if(currentItem == undefined) return
+            setCart(newCart => {
+                let found = false;
+                let buffer = cart.map((order)=>{
+                    if(order.ItemID == item.id) {
+                        found = 1
+                        console.log(order)
+                        return { ...order, amount: order.amount + item.num, price: order.price + item.num * currentItem.Price}
+                    }
+                    else return order
+                })
+                if(!found) 
+                    return [...cart, {ItemID: item.id, ItemName: currentItem.ItemName, amount: item.num, price: item.num * currentItem.Price}]
+                else return buffer;
+            })
+        setIsCartUpdating(false);
+
     }
 
     function goHome(){router.replace("/")}
@@ -66,7 +112,7 @@ export default function MakeAnOrder(){
 
     //--------------------------VIEWS-----------------------------------//
     
-    return(
+    if(!isCartView) return(
         <View style={styles.container}>
             <TouchableOpacity style={styles.button} onPress={()=>{logOut()}}>
                 <Text>{logOutText}</Text>
@@ -77,11 +123,30 @@ export default function MakeAnOrder(){
             </View>
 
             <Text>Make An Order</Text>
-            <TouchableOpacity style={styles.button} onPress={()=>{goHome()}}>
+            <TouchableOpacity style={styles.button} onPress={()=>{/*goHome()*/ console.log(cart)}}>
                 <Text>Home</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={()=>{}}>
-                <Text>See Cart</Text>
+            <TouchableOpacity style={styles.button} onPress={()=>{setIsCartView(true)}}>
+                <Text>{(!isCartUpdating)?"See Cart":"Updating Cart"}</Text>
+            </TouchableOpacity>
+        </View>
+    )
+    else return(
+        <View style={styles.container}>
+            <TouchableOpacity style={styles.button} onPress={()=>{logOut()}}>
+                <Text>{logOutText}</Text>
+            </TouchableOpacity>
+
+            <View>
+                <CartItems/>
+            </View>
+
+            <Text>Cart</Text>
+            <TouchableOpacity style={styles.button} onPress={()=>{/*goHome()*/ console.log(cart)}}>
+                <Text>Home</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={()=>{setIsCartView(false)}}>
+                <Text>Return to Orders {/*Might need to rename this */}</Text> 
             </TouchableOpacity>
         </View>
     )
