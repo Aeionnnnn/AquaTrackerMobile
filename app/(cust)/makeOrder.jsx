@@ -2,30 +2,36 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-nativ
 import { router } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabase';
+import OrderItem  from '../../components/OrderItem'
 
 export default function MakeAnOrder(){
     const [logOutText, setLogOutText] = useState("Log Out");
-    const [cart, setCart] = useState([])
+    const [cart, setCart] = useState([]);
+    const [isCartUpdating, setIsCartUpdating] = useState(0);
     const [itemsProd, setItemsProd] = useState([]);
     const [isItemsLoaded, setIsItemsLoaded] = useState(0);
 
+    // return(
+    //                 <View style={styles.itemCard} key={key}>
+    //                     <Text>{item.ItemName}</Text>
+    //                     <Text>Php {item.Price}</Text>
+    //                     <Text>{item.Description}</Text>
+    //                     <Text> Number of Orders {/*Please make guards for non numeric input */}
+    //                         <TextInput style={styles.input} keyboardType='numeric'/> 
+    //                         <TouchableOpacity style={styles.button} onPress={()=>{addToCart({
+
+    //                         })}}>
+    //                             <Text>Add to Cart</Text>
+    //                         </TouchableOpacity>
+    //                     </Text>
+    //                 </View>
+    //             )
+
     const Items = () => {
         if(isItemsLoaded){
-            return itemsProd.map((item, key)=>{
-                return(
-                    <View style={styles.itemCard} key={key}>
-                        <Text>{item.ItemName}</Text>
-                        <Text>Php {item.Price}</Text>
-                        <Text>{item.Description}</Text>
-                        <Text> Number of Orders {/*Please make guards for non numeric input */}
-                            <TextInput style={styles.input} keyboardType='numeric'/> 
-                            <TouchableOpacity style={styles.button} onPress={()=>{addToCart({
-                                
-                            })}}><Text>Add to Cart</Text></TouchableOpacity>
-                        </Text>
-                    </View>
-                )
-            })
+            return itemsProd.map((item)=>{return <OrderItem key={item.ItemID} 
+                cargo={{item: item,addToCart: addToCart}
+                }/>})
         }else return(<Text>Items Loading...</Text>)        
     }
 
@@ -50,8 +56,8 @@ export default function MakeAnOrder(){
         setLogOutText("Log Out");
     }
 
-    function addToCart(){
-
+    function addToCart(item){
+        console.log(item)
     }
 
     function goHome(){router.replace("/")}
