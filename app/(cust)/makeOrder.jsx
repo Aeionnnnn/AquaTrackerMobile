@@ -11,23 +11,6 @@ export default function MakeAnOrder(){
     const [itemsProd, setItemsProd] = useState([]);
     const [isItemsLoaded, setIsItemsLoaded] = useState(false);
     const [isCartView, setIsCartView] = useState(false)
-
-    // return(
-    //                 <View style={styles.itemCard} key={key}>
-    //                     <Text>{item.ItemName}</Text>
-    //                     <Text>Php {item.Price}</Text>
-    //                     <Text>{item.Description}</Text>
-    //                     <Text> Number of Orders {/*Please make guards for non numeric input */}
-    //                         <TextInput style={styles.input} keyboardType='numeric'/> 
-    //                         <TouchableOpacity style={styles.button} onPress={()=>{addToCart({
-
-    //                         })}}>
-    //                             <Text>Add to Cart</Text>
-    //                         </TouchableOpacity>
-    //                     </Text>
-    //                 </View>
-    //             )
-
     const Items = () => {
         if(isItemsLoaded){
             return itemsProd.map((item)=>{return <OrderItem key={item.ItemID} 
@@ -40,7 +23,6 @@ export default function MakeAnOrder(){
         if(itemsProd && cart){
             let returnArr = [];
             let totalPrice = 0;
-            
             cart.forEach((cartItem) => {
                 totalPrice += cartItem.price;
                 returnArr.push(
@@ -51,15 +33,12 @@ export default function MakeAnOrder(){
                     </View>
                 )
             })
-            
             returnArr.push(
                 <View style={styles.itemCard}>
                     {(totalPrice > 0)?<Text>Total Price: {totalPrice}</Text>:<Text>Nothing in Cart</Text>}
                 </View>
             )
-            
             return returnArr
-
         }
     }
 
@@ -142,7 +121,7 @@ export default function MakeAnOrder(){
             </View>
 
             <Text>Cart</Text>
-            <TouchableOpacity style={styles.button} onPress={()=>{/*goHome()*/ console.log(cart)}}>
+            <TouchableOpacity style={styles.button} onPress={()=>{goHome()}}>
                 <Text>Home</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={()=>{setIsCartView(false)}}>
