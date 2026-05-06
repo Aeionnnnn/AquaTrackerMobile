@@ -40,7 +40,7 @@ const initLoad = async () =>{
 
     if(userData.user != null) switch(userData.user.user_metadata.type){
         case "CUST":
-            router.replace("/detail")
+            router.replace("/makeOrder")
         break;
         case "STAFF":
             router.replace("/detail")
