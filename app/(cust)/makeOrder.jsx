@@ -11,6 +11,7 @@ export default function MakeAnOrder(){
     const [itemsProd, setItemsProd] = useState([]);
     const [isItemsLoaded, setIsItemsLoaded] = useState(false);
     const [isCartView, setIsCartView] = useState(false)
+    const [isCartDelivery, setIsCartDelivery] = useState(false)
     const Items = () => {
         if(isItemsLoaded){
             return itemsProd.map((item)=>{return <OrderItem key={item.ItemID} 
@@ -123,6 +124,12 @@ export default function MakeAnOrder(){
             <Text>Cart</Text>
             <TouchableOpacity style={styles.button} onPress={()=>{goHome()}}>
                 <Text>Home</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={()=>{console.log(cart); setCart([])}}>
+                <Text>Order {/*Might need to change this */}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={()=>{setIsCartDelivery(!isCartDelivery)}}>
+                <Text>Delivery: {(isCartDelivery)?"Yes":"No"} {/*Might need to change this */}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={()=>{setIsCartView(false)}}>
                 <Text>Return to Orders {/*Might need to rename this */}</Text> 
