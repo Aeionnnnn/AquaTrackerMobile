@@ -123,7 +123,7 @@ export default function MakeAnOrder(){
             </View>
 
             <Text>Make An Order</Text>
-            <TouchableOpacity style={styles.button} onPress={()=>{/*goHome()*/ console.log(cart)}}>
+            <TouchableOpacity style={styles.button} onPress={()=>{goHome()}}>
                 <Text>Home</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={()=>{setIsCartView(true)}}>
