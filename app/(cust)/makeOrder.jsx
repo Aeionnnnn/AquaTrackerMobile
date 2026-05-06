@@ -67,20 +67,20 @@ export default function MakeAnOrder(){
         setIsCartUpdating(true);
         let currentItem = itemsProd.find(prod => prod.ItemID === item.id)
         if(currentItem == undefined) return
-            setCart(newCart => {
-                let found = false;
-                let buffer = cart.map((order)=>{
-                    if(order.ItemID == item.id) {
-                        found = 1
-                        console.log(order)
-                        return { ...order, amount: order.amount + item.num, price: order.price + item.num * currentItem.Price}
-                    }
-                    else return order
-                })
-                if(!found) 
-                    return [...cart, {ItemID: item.id, ItemName: currentItem.ItemName, amount: item.num, price: item.num * currentItem.Price}]
-                else return buffer;
+        setCart(newCart => {
+            let found = false;
+            let buffer = cart.map((order)=>{
+                if(order.ItemID == item.id) {
+                    found = 1
+                    console.log(order)
+                    return { ...order, amount: order.amount + item.num, price: order.price + item.num * currentItem.Price}
+                }
+                else return order
             })
+            if(!found) 
+                return [...cart, {ItemID: item.id, ItemName: currentItem.ItemName, amount: item.num, price: item.num * currentItem.Price}]
+            else return buffer;
+        })
         setIsCartUpdating(false);
 
     }
