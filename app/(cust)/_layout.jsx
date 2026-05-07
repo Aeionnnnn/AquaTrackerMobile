@@ -9,6 +9,13 @@ export default function TabLayout() {
                 headerShown: false //not shown for now because styling is not yet implemented
               }} 
             />
+            <Tabs.Screen
+              name = "orderHistory"
+              options = {{
+                title: "Order History",
+                headerShown: false
+              }}
+            />
         </Tabs>
     );
 }
