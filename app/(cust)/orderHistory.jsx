@@ -33,7 +33,7 @@ export default function OrderHistory(){
 
     function mergeIntoCard(order, orderItems){
         return(
-            <View style={styles.itemCard}>
+            <View style={styles.orderCard}>
                     <Text>ID: {order.OrderID} -- Status: {order.Status}</Text>
                     <Text>Date: {order.OrderDate}</Text>
                     {orderItems}
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
     },
-    itemCard: {
+    orderCard: {
         backgroundColor: 'lightblue',
         margin: 5,
         padding: 10,
