@@ -9,6 +9,8 @@ export default function OrderHistory(){
     const [isOrderHistoryLoad, setIsOrderHistoryLoad] = useState(false);
     //const [orderCards, setOrderCards] = useState([]);
     const OrderHistory = () => {
+        if(!orderHistory.length) return(<Text>Currently No Orders</Text>);
+
         if(isOrderHistoryLoad) {
             return buildOrderHistory();
         }
@@ -22,8 +24,11 @@ export default function OrderHistory(){
         if(orderHistErr) console.log(orderHistErr);
         else console.log(orderHistData);
 
-        setOrderHistory(orderHistData);
-        setIsOrderHistoryLoad(true);
+        if(orderHistData.length){
+            setOrderHistory(orderHistData);
+            setIsOrderHistoryLoad(true);
+        }else{}
+        
     }
 
     function mergeIntoCard(order, orderItems){
@@ -61,7 +66,27 @@ export default function OrderHistory(){
         return (<View>{orderCard}</View>);
     }
 
-    useEffect(()=>{getOrderHistory()},[]);
+    useEffect(()=>{
+        getOrderHistory();
+        const channel = supabase
+        .channel("orderUpdated")
+        .on(
+            "postgres_changes",
+            {
+                event: '*',
+                schema: 'public',
+                table: 'orders'
+            },
+            (payload) => {
+                getOrderHistory();
+            }
+        )
+        .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        }
+    },[]);
 
     return(
         <View style={styles.container}>
