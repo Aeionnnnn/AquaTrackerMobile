@@ -46,7 +46,10 @@ export default function MakeAnOrder(){
     async function initItems(){
         const {data: dataItems, error: errorItems} = await supabase.from("items").select();
 
-        if(errorItems){console.log(errorItems)}
+        if(errorItems){
+            console.log("There was a problem processing your order") //Maybe change this feedback to be more professional?
+            console.log(errorItems)
+        }
 
         if(dataItems) {
             console.log(dataItems)
