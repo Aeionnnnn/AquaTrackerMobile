@@ -10,6 +10,13 @@ export default function TabLayout() {
               }} 
             />
             <Tabs.Screen
+              name = "currentOrder"
+              options = {{
+                title: "Current Order",
+                headerShown: false
+              }}
+            />
+            <Tabs.Screen
               name = "orderHistory"
               options = {{
                 title: "Order History",
