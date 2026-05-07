@@ -44,6 +44,14 @@ export default function SignUpScreen() {
 
         console.log(data)
 
+        if(data.user){
+            switch(data.user.user_metadata.type){
+                case "CUST":
+                    router.replace("/makeOrder");
+                break;
+            }
+        }
+
         setPass("");
     }
 
