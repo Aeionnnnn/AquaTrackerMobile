@@ -22,6 +22,21 @@ export default function RootLayout() {
                 title: "Manage Orders",
                 headerShown: false //not shown for now because styling is not yet implemented
             }} />
+
+            <Tabs.Screen
+            name= "deliveries"
+              options={{
+                title: "Deliveries",
+                headerShown: false //not shown for now because styling is not yet implemented
+            }} />
+
+            <Tabs.Screen
+              name= "deliv_detail"
+                options={{
+                  title: "Deliveries",
+                  href:null,
+                  headerShown: false //not shown for now because styling is not yet implemented
+              }} />
         </Tabs>
     );
 }
