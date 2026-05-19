@@ -68,8 +68,8 @@ export default function OrderHistory(){
 
     useEffect(()=>{
         getOrderHistory();
-        const channel = supabase
-        .channel("orderUpdated")
+        const channelHistory = supabase
+        .channel("histUpdated")
         .on(
             "postgres_changes",
             {
@@ -84,7 +84,7 @@ export default function OrderHistory(){
         .subscribe();
 
         return () => {
-            supabase.removeChannel(channel);
+            supabase.removeChannel(channelHistory);
         }
     },[]);
 
