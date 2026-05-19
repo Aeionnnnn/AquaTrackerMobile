@@ -17,13 +17,16 @@ export default function LoginScreen() {
 
         console.log(userData)
 
+        const {data: roleData, error: roleError} = await supabase.rpc("get_role");
+
+        console.log(roleData);
         if(userData.user){
-            switch(userData.user.user_metadata.type){
+            switch(roleData){
                 case "CUST":
                     router.replace("/makeOrder")
                 break;
                 case "STAFF":
-                    router.replace("/makeOrder")
+                    router.replace("/makeOrderStaff")
                 break;
             }
         }

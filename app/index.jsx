@@ -38,12 +38,14 @@ const initLoad = async () =>{
     if(error) console.log(error);
     console.log(userData.user)
 
-    if(userData.user != null) switch(userData.user.user_metadata.type){
+    const {data: roleData, error: roleError} = await supabase.rpc("get_role");
+
+    if(userData.user != null) switch(roleData){
         case "CUST":
             router.replace("/makeOrder")
         break;
         case "STAFF":
-            router.replace("/makeOrder")
+            router.replace("/makeOrderStaff")
         break;
     }
 
