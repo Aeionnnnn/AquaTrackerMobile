@@ -9,7 +9,12 @@ export default function RootLayout() {
                 headerShown: false //not shown for now because styling is not yet implemented
             }} />
 
-
+            <Tabs.Screen
+            name= "orderHistoryStaff"
+              options={{
+                title: "Order History",
+                headerShown: false //not shown for now because styling is not yet implemented
+            }} />
         </Tabs>
     );
 }
