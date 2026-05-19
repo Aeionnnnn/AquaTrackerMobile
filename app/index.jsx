@@ -43,7 +43,7 @@ const initLoad = async () =>{
             router.replace("/makeOrder")
         break;
         case "STAFF":
-            router.replace("/detail")
+            router.replace("/makeOrder")
         break;
     }
 

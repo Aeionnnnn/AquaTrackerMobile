@@ -22,6 +22,9 @@ export default function LoginScreen() {
                 case "CUST":
                     router.replace("/makeOrder")
                 break;
+                case "STAFF":
+                    router.replace("/makeOrder")
+                break;
             }
         }
     }
