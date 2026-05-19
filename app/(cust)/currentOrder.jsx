@@ -9,7 +9,7 @@ export default function CurrentOrder(){
     const [currentOrderLoad, setCurrentOrderLoad] = useState(false);
     const CurrentOrder = () => {
         if(currentOrderLoad){
-            return buildCurrentOrder();
+            return (currentOrder.length > 0)?buildCurrentOrder():(<Text>No Current Order</Text>);
         }else return (<Text>Loading Current Order...</Text>)
     }
 
@@ -24,12 +24,18 @@ export default function CurrentOrder(){
         }
     }
 
+    async function cancelOrder(){
+        const {data: cancelData, error: cancelError} = await supabase.rpc("cancel_current_order")
+
+        console.log(cancelData)
+    }
+
     function buildCurrentOrder(){
         let item_stack = [];
         
-        currentOrder.forEach((order) => {
+        currentOrder.forEach((order, ndx) => {
             item_stack.push((
-                <Text>{order.ItemName}: Php {order.Price} x {order.ItemQuantity}</Text>
+                <Text key={ndx}>{order.ItemName}: Php {order.Price} x {order.ItemQuantity}</Text>
             ))
         })
 
@@ -39,6 +45,7 @@ export default function CurrentOrder(){
                     <Text>Date: {currentOrder[0].OrderDate}</Text>
                     {item_stack}
                     <Text>Total Price: {currentOrder[0].TotalPrice}</Text>
+                <TouchableOpacity onPress={()=>{cancelOrder()}}><Text>Cancel</Text></TouchableOpacity>    
             </View>
         )
     }
